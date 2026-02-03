@@ -5,7 +5,7 @@ use keygen_rs::{
     config::{self, KeygenConfig},
     license::SchemeCode,
 };
-use rand::rngs::OsRng;
+use rand_core::OsRng;
 use serde_json::json;
 use std::env;
 

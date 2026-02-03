@@ -313,7 +313,7 @@ mod tests {
     use crate::license::SchemeCode;
     use base64::engine::general_purpose;
     use ed25519_dalek::{Signer, SigningKey};
-    use rand::rngs::OsRng;
+    use rand_core::OsRng;
     use reqwest::header::{HeaderMap, HeaderValue};
     use serde_json::json;
 

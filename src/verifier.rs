@@ -313,12 +313,12 @@ mod tests {
     use crate::license::SchemeCode;
     use base64::engine::general_purpose;
     use ed25519_dalek::{Signer, SigningKey};
-    use rand_core::OsRng;
+    use getrandom::{rand_core::UnwrapErr, SysRng};
     use reqwest::header::{HeaderMap, HeaderValue};
     use serde_json::json;
 
     fn generate_valid_keys() -> (String, String) {
-        let mut csprng = OsRng;
+        let mut csprng = UnwrapErr(SysRng);
         let keypair: SigningKey = SigningKey::generate(&mut csprng);
 
         let public_key = hex::encode(keypair.verifying_key().as_bytes());
@@ -435,7 +435,7 @@ mod tests {
     #[test]
     fn test_verify_keygen_signature() {
         // Generate keypair for testing
-        let mut csprng = OsRng;
+        let mut csprng = UnwrapErr(SysRng);
         let keypair: SigningKey = SigningKey::generate(&mut csprng);
         let public_key = hex::encode(keypair.verifying_key().as_bytes());
 
@@ -494,7 +494,7 @@ mod tests {
 
     #[test]
     fn test_verify_keygen_signature_with_missing_header() {
-        let mut csprng = OsRng;
+        let mut csprng = UnwrapErr(SysRng);
         let keypair: SigningKey = SigningKey::generate(&mut csprng);
         let public_key = hex::encode(keypair.verifying_key().as_bytes());
 

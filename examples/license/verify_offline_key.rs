@@ -1,16 +1,16 @@
 use base64::{engine::general_purpose, Engine as _};
 use dotenv::dotenv;
 use ed25519_dalek::{Signer, SigningKey};
+use getrandom::{rand_core::UnwrapErr, SysRng};
 use keygen_rs::{
     config::{self, KeygenConfig},
     license::SchemeCode,
 };
-use rand_core::OsRng;
 use serde_json::json;
 use std::env;
 
 fn generate_signed_license_key(key: String) -> (String, String) {
-    let mut csprng = OsRng;
+    let mut csprng = UnwrapErr(SysRng);
     let keypair: SigningKey = SigningKey::generate(&mut csprng);
 
     let payload = json!({

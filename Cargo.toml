@@ -1,24 +1,9 @@
-[workspace]
-members = [
-  ".",
-  # "./packages/tauri-plugin-keygen-rs",
-  "./packages/tauri-plugin-keygen-rs2"
-]
-
 [package]
 name = "keygen-rs"
-version.workspace = true
-description = "Unofficial Rust SDK for integrating with the keygen.sh licensing service."
-license.workspace = true
-edition.workspace = true
-
-[workspace.package]
 version = "0.8.1"
+description = "Unofficial Rust SDK for integrating with the keygen.sh licensing service."
 license = "MIT"
 edition = "2021"
-
-[workspace.dependencies]
-keygen-rs = { path = ".", version = "0.8.1", default-features = false }
 
 [package.metadata.rust-analyzer]
 cargo.features = ["token"]
@@ -26,7 +11,7 @@ cargo.features = ["token"]
 [features]
 default = ["rustls", "license-key"]
 # Use rustls as TLS backend (default)
-rustls = ["reqwest/rustls-tls"]
+rustls = ["reqwest/rustls-no-provider"]
 # Use native-tls backend
 native-tls = ["reqwest/native-tls"]
 # License Key Authentication (for end users)
@@ -35,39 +20,45 @@ license-key = []
 token = []
 
 [dependencies]
-reqwest = { version = "0.11", features = [
+reqwest = { version = "0.13", features = [
     "json",
-    "rustls-tls",
+    "rustls-no-provider",
+    "http2",
+    "brotli",
+    "gzip",
+    "zstd",
 ], default-features = false }
-tokio = { version = "1.0", features = ["full"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-chrono = { version = "0.4", features = ["serde"] }
-thiserror = "1.0"
-sha2 = "0.10"
-url = "2.2"
-async-trait = "0.1"
-futures = "0.3"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = { version = "0", features = ["serde"] }
+thiserror = "2"
+sha2 = "=0.11.0-rc.4"
+digest = "=0.11.0-rc.8"
+url = "2"
+async-trait = "0"
+futures = "0"
 serde_urlencoded = "0.7"
 mockito = "0.31"
-lazy_static = "1.4.0"
-base64 = "0.21.0"
-hex = "0.4.3"
-ed25519-dalek = { version = "2.1", features = ["rand_core"] }
-rand = "0.8"
-hostname = "0.4.0"
-num_cpus = "1.16.0"
-dotenv = "0.15.0"
-subtle = "2.5"
-aes-gcm = "0.10"
-log = { version = "0.4", features = ["std"] }
-futures-timer = "3.0.3"
+lazy_static = "1"
+base64 = "0"
+hex = "0"
+ed25519-dalek = { version = "=3.0.0-pre.4", features = ["rand_core"] }
+rand = { version = "0.9" }
+rand_core = "0.10"
+hostname = "0.4"
+num_cpus = "1"
+dotenvy = "0.15"
+subtle = "2"
+aes-gcm = "0.11.0-rc.3"
+log = { version = "0", features = ["std"] }
+futures-timer = "3"
 
 [dev-dependencies]
-machine-uid = "0.5.3"
+machine-uid = "0"
 dotenv = "0.15"
-uuid = { version = "1.0", features = ["v4"] }
-chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["v4"] }
+chrono = { version = "0", features = ["serde"] }
+getrandom = { version = "0.4", features = ["sys_rng"] }
 
 [[example]]
 name = "create_product"

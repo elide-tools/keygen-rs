@@ -41,13 +41,16 @@ impl Decryptor {
 
         let cipher = Aes256Gcm::new_from_slice(&key)
             .map_err(|_| Error::DecryptionError("Invalid key length".into()))?;
-        let nonce = Nonce::from_slice(&iv);
+        let nonce: Nonce<_> = iv
+            .as_slice()
+            .try_into()
+            .map_err(|_| Error::DecryptionError("Invalid IV length".into()))?;
 
         let mut encrypted_data = ciphertext;
         encrypted_data.extend_from_slice(&tag);
 
         let plaintext = cipher
-            .decrypt(nonce, encrypted_data.as_ref())
+            .decrypt(&nonce, encrypted_data.as_ref())
             .map_err(|_| Error::DecryptionError("Decryption failed".into()))?;
 
         Ok(plaintext)
